@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --wa-green: #00a884;
+  --wa-green-dark: #008f72;
+  --wa-green-light: #d9fdd3;
+  --wa-bg: #efeae2;
+  --wa-bg-pattern: #d1d7db;
+  --wa-sidebar-bg: #ffffff;
+  --wa-header-bg: #008069;
+  --wa-chat-bg: #efeae2;
+  --wa-outgoing: #d9fdd3;
+  --wa-incoming: #ffffff;
+  --wa-text: #111b21;
+  --wa-text-secondary: #667781;
+  --wa-border: #e9edef;
+  --wa-hover: #f5f6f6;
+  --wa-input-bg: #ffffff;
+  --wa-unread: #25d366;
+  --wa-online: #25d366;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-wa-green: var(--wa-green);
+  --color-wa-green-dark: var(--wa-green-dark);
+  --color-wa-green-light: var(--wa-green-light);
+  --color-wa-bg: var(--wa-bg);
+  --color-wa-bg-pattern: var(--wa-bg-pattern);
+  --color-wa-sidebar-bg: var(--wa-sidebar-bg);
+  --color-wa-header-bg: var(--wa-header-bg);
+  --color-wa-chat-bg: var(--wa-chat-bg);
+  --color-wa-outgoing: var(--wa-outgoing);
+  --color-wa-incoming: var(--wa-incoming);
+  --color-wa-text: var(--wa-text);
+  --color-wa-text-secondary: var(--wa-text-secondary);
+  --color-wa-border: var(--wa-border);
+  --color-wa-hover: var(--wa-hover);
+  --color-wa-input-bg: var(--wa-input-bg);
+  --color-wa-unread: var(--wa-unread);
+  --color-wa-online: var(--wa-online);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: var(--wa-bg);
+  color: var(--wa-text);
+  font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.chat-bg {
+  background-color: var(--wa-bg);
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8c3bb' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.message-bubble {
+  position: relative;
+}
+
+.message-bubble::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.message-outgoing::before {
+  right: -8px;
+  border-left: 8px solid var(--wa-outgoing);
+  border-bottom: 8px solid transparent;
+}
+
+.message-incoming::before {
+  left: -8px;
+  border-right: 8px solid var(--wa-incoming);
+  border-bottom: 8px solid transparent;
+}
+
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.typing-dot:nth-child(1) {
+  animation: typing-dot 1.4s infinite 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation: typing-dot 1.4s infinite 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation: typing-dot 1.4s infinite 0.4s;
 }
