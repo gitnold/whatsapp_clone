@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition, useRef } from "react";
+import { useState, useTransition, useRef } from "react";
 import type { GroupWithMembers, User } from "@/lib/definitions";
 import {
   searchUsers,
@@ -22,7 +22,12 @@ export default function GroupHeader({ group, currentUser }: GroupHeaderProps) {
   const [editName, setEditName] = useState(group.name);
   const [editDesc, setEditDesc] = useState(group.description || "");
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<{
+    id: string;
+    fullName: string;
+    email: string;
+    avatarUrl: string | null;
+  }[]>([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -34,36 +39,28 @@ export default function GroupHeader({ group, currentUser }: GroupHeaderProps) {
     (m) => m.userId === currentUser.id && m.role === "admin"
   );
 
-  // Sync edits when group prop changes
-  useEffect(() => {
-    setEditName(group.name);
-    setEditDesc(group.description || "");
-  }, [group]);
-
-  // Handle member search autocomplete
-  useEffect(() => {
-    if (searchQuery.trim().length < 2) {
-      setSearchResults([]);
-      return;
-    }
+  const handleSearchQueryChange = async (val: string) => {
+    setSearchQuery(val);
+    setShowSearchResults(true);
 
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
+    if (val.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
     searchTimeoutRef.current = setTimeout(async () => {
-      const results = await searchUsers(searchQuery);
+      const results = await searchUsers(val);
       // Filter out existing members
       const filtered = results.filter(
         (r) => !group.members.some((m) => m.userId === r.id)
       );
       setSearchResults(filtered);
     }, 300);
-
-    return () => {
-      if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-    };
-  }, [searchQuery, group.members]);
+  };
 
   const handleUpdateInfo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,10 +299,7 @@ export default function GroupHeader({ group, currentUser }: GroupHeaderProps) {
                     <input
                       type="text"
                       value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setShowSearchResults(true);
-                      }}
+                      onChange={(e) => handleSearchQueryChange(e.target.value)}
                       onFocus={() => setShowSearchResults(true)}
                       placeholder="Search users by name or email"
                       className="w-full px-3 py-2 pl-9 border border-wa-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-wa-green"

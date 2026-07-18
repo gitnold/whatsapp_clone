@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { groups, groupMembers, messages, users } from "@/db/schema";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { groups, groupMembers, messages } from "@/db/schema";
+import { eq, desc, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "./auth";
 import type { GroupWithMembers, MessageWithUser } from "@/lib/definitions";

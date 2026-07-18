@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import type { User, GroupWithMembers } from "@/lib/definitions";
 import { logout } from "@/app/actions/auth";
 import { createGroup } from "@/app/actions/groups";
@@ -14,7 +13,6 @@ type ChatSidebarProps = {
 };
 
 export default function ChatSidebar({
-  currentUser,
   groups = [],
   activeGroupId,
 }: ChatSidebarProps) {
@@ -22,7 +20,6 @@ export default function ChatSidebar({
   const [groupName, setGroupName] = useState("");
   const [groupDesc, setGroupDesc] = useState("");
   const [creating, setCreating] = useState(false);
-  const router = useRouter();
 
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();

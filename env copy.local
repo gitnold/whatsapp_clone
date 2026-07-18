@@ -1,0 +1,4 @@
+NEXT_PUBLIC_SUPABASE_URL=https://vyzjyqxtkbacncgdtlyk.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_HDwMQbiox_MzXGIGk_LCZg_T4DiRk1q
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_HDwMQbiox_MzXGIGk_LCZg_T4DiRk1q
+DATABASE_URL=postgresql://localhost:5433/postgres

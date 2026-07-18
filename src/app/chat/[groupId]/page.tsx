@@ -36,7 +36,7 @@ export default async function ChatPage({
       <div className="flex flex-1 overflow-hidden">
         <ChatSidebar currentUser={user} groups={groups} activeGroupId={groupId} />
         <div className="flex-1 flex flex-col">
-          <GroupHeader group={group} currentUser={user} />
+          <GroupHeader key={group.id} group={group} currentUser={user} />
           <ChatMessages messages={messages} currentUserId={user.id} />
           <MessageInput groupId={groupId} />
         </div>
