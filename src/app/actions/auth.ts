@@ -122,9 +122,23 @@ export async function getCurrentUser() {
 
     if (!user) return null;
 
-    const dbUser = await db.query.users.findFirst({
+    let dbUser = await db.query.users.findFirst({
       where: eq(users.id, user.id),
     });
+
+    // Self-healing: if the user is authenticated in Supabase but missing in public.users, create the row
+    if (!dbUser) {
+      const [inserted] = await db
+        .insert(users)
+        .values({
+          id: user.id,
+          email: user.email!,
+          fullName: user.user_metadata?.full_name || user.email!.split("@")[0],
+        })
+        .returning();
+      dbUser = inserted;
+      console.log(`Auto-created missing user row for: ${user.email}`);
+    }
 
     return dbUser || null;
   } catch (error) {
