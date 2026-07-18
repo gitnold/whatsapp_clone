@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/actions/auth";
-import { getGroups } from "@/app/actions/groups";
+import { getAllGroups } from "@/app/actions/groups";
 import ChatSidebar from "@/components/ChatSidebar";
 import EmptyChat from "@/components/EmptyChat";
 
@@ -8,7 +8,7 @@ export default async function ChatRootPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const groups = await getGroups();
+  const groups = await getAllGroups();
 
   return (
     <div className="h-screen flex flex-col">

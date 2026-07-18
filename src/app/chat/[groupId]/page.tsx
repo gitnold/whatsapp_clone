@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/app/actions/auth";
-import { getGroups, getGroupById, getMessages } from "@/app/actions/groups";
+import { getAllGroups, getGroupById, getMessages } from "@/app/actions/groups";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatMessages from "@/components/ChatMessages";
 import MessageInput from "@/components/MessageInput";
@@ -18,7 +18,7 @@ export default async function ChatPage({
   const [group, messages, groups] = await Promise.all([
     getGroupById(groupId),
     getMessages(groupId),
-    getGroups(),
+    getAllGroups(),
   ]);
 
   if (!group) redirect("/chat");

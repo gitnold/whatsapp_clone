@@ -95,6 +95,48 @@ export async function getGroups(): Promise<GroupWithMembers[]> {
   return result;
 }
 
+export async function getAllGroups(): Promise<GroupWithMembers[]> {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return [];
+
+  const allGroups = await db.query.groups.findMany();
+
+  const result: GroupWithMembers[] = [];
+
+  for (const group of allGroups) {
+    const members = await db.query.groupMembers.findMany({
+      where: eq(groupMembers.groupId, group.id),
+      with: {
+        user: true,
+      },
+    });
+
+    const lastMessage = await db.query.messages.findFirst({
+      where: eq(messages.groupId, group.id),
+      orderBy: [desc(messages.createdAt)],
+      with: {
+        user: true,
+      },
+    });
+
+    result.push({
+      ...group,
+      members,
+      lastMessage: lastMessage
+        ? { ...lastMessage, user: lastMessage.user }
+        : null,
+    });
+  }
+
+  result.sort((a, b) => {
+    const aTime = a.lastMessage?.createdAt?.getTime() ?? a.createdAt.getTime();
+    const bTime = b.lastMessage?.createdAt?.getTime() ?? b.createdAt.getTime();
+    return bTime - aTime;
+  });
+
+  return result;
+}
+
 export async function getGroupById(
   groupId: string
 ): Promise<GroupWithMembers | null> {
